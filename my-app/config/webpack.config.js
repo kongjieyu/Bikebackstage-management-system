@@ -35,7 +35,9 @@ const shouldInlineRuntimeChunk = process.env.INLINE_RUNTIME_CHUNK !== 'false';
 const useTypeScript = fs.existsSync(paths.appTsConfig);
 
 // style files regexes
-const cssRegex =  /\.(css|less)$/;
+const cssRegex =  /\.css$/;
+// const cssRegex = /\.(css|less)$/;
+
 const cssModuleRegex = /\.module\.css$/;
 const sassRegex = /\.(scss|sass)$/;
 const sassModuleRegex = /\.module\.(scss|sass)$/;
@@ -78,7 +80,7 @@ module.exports = function(webpackEnv) {
       },
       {
         //you should put 'less-loader' before 'css-loader'
-        loader: require.resolve('less-loader'),
+        //loader: require.resolve('less-loader'),
         loader: require.resolve('css-loader'),
         options: cssOptions,
       },
@@ -86,7 +88,9 @@ module.exports = function(webpackEnv) {
         // Options for PostCSS as we reference these options twice
         // Adds vendor prefixing based on your specified browser support in
         // package.json
+
         loader: require.resolve('postcss-loader'),
+
         options: {
           // Necessary for external CSS imports to work
           // https://github.com/facebook/create-react-app/issues/2677
@@ -336,8 +340,9 @@ module.exports = function(webpackEnv) {
                 customize: require.resolve(
                   'babel-preset-react-app/webpack-overrides'
                 ),
-                
+                //I add
                 plugins: [
+                  ['import', { libraryName: 'antd', "style": true }], // `style: true` 会加载 less 文件
                   [
                     require.resolve('babel-plugin-named-asset-import'),
                     {
@@ -348,13 +353,6 @@ module.exports = function(webpackEnv) {
                       },
                     },
                   ],
-                  [
-                      'import',
-                      {
-                        "libraryName": "antd", 
-                        style: true
-                      }
-                  ],
                 ],
                 // This is a feature of `babel-loader` for webpack (not Babel itself).
                 // It enables caching results in ./node_modules/.cache/babel-loader/
@@ -364,37 +362,7 @@ module.exports = function(webpackEnv) {
                 compact: isEnvProduction,
               },
             },
-          //   {
-          //     test: /\.less$/,
-          //     use: [
-          //         require.resolve('style-loader'),
-          //         {
-          //             loader: require.resolve('css-loader'),
-          //             options: {importLoaders: 1,},
-          //         },
-          //         {
-          //             loader: require.resolve('postcss-loader'),
-          //             options: {
-          //                 // Necessary for external CSS imports to work
-          //                 // https://github.com/facebookincubator/create-react-app/issues/2677ident: 'postcss',
-          //                 plugins: () => [
-          //                 require('postcss-flexbugs-fixes'),
-          //                 autoprefixer({browsers: ['>1%','last 4 versions','Firefox ESR','not ie < 9', 
-          //                 // React doesn't support IE8 anyway],flexbox: 'no-2009',}),
-          //                 ],
-          //             },
-          //         },
-          //         {
-          //             loader: require.resolve('less-loader'),
-          //             options: {
-          //                 modules: false,
-          //                 javascriptEnabled:true,
-          //                 modifyVars: {"@primary-color": "#f9c700"}
-          //             }
-          //         }
-          //     ]
-          //   }
-          // },
+
 
             // Process any JS outside of the app with Babel.
             // Unlike the application JS, we only compile the standard ES features.
@@ -444,6 +412,48 @@ module.exports = function(webpackEnv) {
               // See https://github.com/webpack/webpack/issues/6571
               sideEffects: true,
             },
+//add less
+            {
+              test: /\.less$/,
+              use: [
+                  require.resolve('style-loader'),
+                  {
+                      loader: require.resolve('css-loader'),
+                      options: {importLoaders: 1,},
+                  },
+                  {
+                      loader: require.resolve('postcss-loader'),
+                      options: {
+                          // Necessary for external CSS imports to work
+                          // https://github.com/facebookincubator/create-react-app/issues/2677ident: 'postcss',
+                          ident: 'postcss',
+                          plugins: () => [
+                          require('postcss-flexbugs-fixes'),
+                          autoprefixer({
+                            browsers: [
+                              '>1%',
+                              'last 4 versions',
+                              'Firefox ESR',
+                              'not ie < 9', 
+                          // React doesn't support IE8 anyway],flexbox: 'no-2009',}),
+                          ],
+                        flexbox: 'no-2009',
+                      }),
+                    ],
+                  },
+                  },
+                  {
+                      loader: require.resolve('less-loader'),
+                      options: {
+                          modules: false,
+                          javascriptEnabled:true,
+                          modifyVars: {"@primary-color": "#f9c700"}
+                      }
+                  }
+              ],
+            },
+
+
             
             // Adds support for CSS Modules (https://github.com/css-modules/css-modules)
             // using the extension .module.css
