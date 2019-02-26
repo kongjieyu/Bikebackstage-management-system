@@ -5,7 +5,9 @@
   "dependencies": {
     "@babel/core": "7.2.2",
     "@svgr/webpack": "4.1.0",
+    "antd": "^3.13.6",
     "axios": "^0.18.0",
+    "babel": "^6.23.0",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "9.0.0",
     "babel-jest": "23.6.0",
@@ -34,6 +36,8 @@
     "jest-pnp-resolver": "1.0.2",
     "jest-resolve": "23.6.0",
     "jest-watch-typeahead": "^0.2.1",
+    "jsonp": "^0.2.1",
+    "less": "^3.9.0",
     "less-loader": "^4.1.0",
     "mini-css-extract-plugin": "0.5.0",
     "optimize-css-assets-webpack-plugin": "5.0.1",
@@ -121,5 +125,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "antd": "^3.13.6"
   }
 }
