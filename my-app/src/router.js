@@ -4,6 +4,7 @@ import { HashRouter, Route, Switch } from 'react-router-dom';
 import App from './App'
 import Login from './pages/login';
 import Buttons from './pages/ui/buttons';
+import Modals from './pages/ui/modals';
 import NoMatch from './pages/nomatch';
 import Admin from './admin'
 export default class IRouter extends Component {
@@ -15,8 +16,11 @@ export default class IRouter extends Component {
                     {/* Admin 下还有嵌套路由*/}
                     <Route path="/admin" render={()=>
                         <Admin>
-                            <Route path="/admin/ui/buttons" component={Buttons}/>
-                            <Route component={NoMatch}/>
+                            <Switch>
+                                <Route path="/admin/ui/buttons" component={Buttons}/>
+                                 <Route path="/admin/ui/modals" component={Modals}/> 
+                                <Route component={NoMatch}/>
+                            </Switch>
                         </Admin>
                     }/>
                     <Route path="/order/detail" component={Login}/>
