@@ -58,14 +58,16 @@ class FormLogin extends Component{
                                     )}
                         </FormItem>
                         <FormItem>
-                            {getFieldDecorator('userPwd', {
+                            {getFieldDecorator('userPwd', 
+                                {
                                 initialValue: '123456',
                                 rules: [{ 
                                     required: true, 
                                     message: 'Please input your Password!' }],
-                                        })(
-                                        <Input  prefix={<Icon type="lock" />} placeholder="请输入密码" />
-                                        )}
+                                })
+                                (
+                                <Input  prefix={<Icon type="lock" />} placeholder="请输入密码" />
+                                )}
                         </FormItem>
                         <FormItem>
                             {
