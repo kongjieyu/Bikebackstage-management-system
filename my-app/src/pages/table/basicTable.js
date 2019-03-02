@@ -1,6 +1,7 @@
 import React, { Component }  from 'react';
 import { Card, Table } from 'antd'
-import axios from 'axios'
+import axios from './../../axios/index'
+// import axios from 'axios'
 
 const { Column, ColumnGroup } = Table;
 export default class BasicTable extends React.Component{
@@ -54,23 +55,37 @@ export default class BasicTable extends React.Component{
         //获取mock数据
         this.request();
     }
-    request = () =>{
-        let baseUrl = 'https://www.easy-mock.com/mock/5c79ce273198586d15fdff04/mockapi'
-        axios.get(baseUrl+'/table/list')
-            .then((res) => {
-                console.log(res.status)
-                if(res.status == '200' && res.data.code == 0){
-                    console.log(JSON.stringify(res));
-                    this.setState({
-                        dataSource2: res.data.result
-                    })
-                }
+    request = () => {
+        // let baseUrl = 'https://www.easy-mock.com/mock/5c79ce273198586d15fdff04/mockapi'
+        // axios.get(baseUrl+'/table/list')
+        //     .then((res) => {
+        //         console.log(res.status)
+        //         if(res.status == '200' && res.data.code == 0){
+        //             console.log(JSON.stringify(res));
+        //             this.setState({
+        //                 dataSource2: res.data.result
+        //             })
+        //         }
                 
-            })
-            .catch((err)=>{
-                console.log(JSON.stringify(err));
-            });
-
+        //     })
+        //     .catch((err)=>{
+        //         console.log(JSON.stringify(err));
+        //     });
+        axios.ajax({
+            url: '/table/list',
+            data: {
+                params:{
+                    page:1
+                }
+            }
+        }).then((res)=>{
+            if(res.code ==0){
+                console.log(JSON.stringify(res))
+                this.setState({
+                    dataSource2: res.result
+                })
+            }
+        })
     }
     render(){
         const columns = [
