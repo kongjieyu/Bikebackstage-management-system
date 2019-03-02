@@ -11,26 +11,25 @@ import BasicTable from './pages/table/basicTable'
 import NoMatch from './pages/nomatch';
 import Admin from './admin'
 export default class IRouter extends Component {
-    render(){
+    render() {
         return (
             <HashRouter>
                 <App>
-                    <Route path="/login" component={Login}/>
+                    <Route path="/login" component={Login} />
                     {/* Admin 下还有嵌套路由*/}
-                    <Route path="/admin" render={()=>
+                    <Route path="/admin" render={() =>
                         <Admin>
                             <Switch>
-                                <Route path="/admin/ui/buttons" component={Buttons}/>
-                                 <Route path="/admin/ui/modals" component={Modals}/> 
-                                 <Route path="/admin/form/login" component={FormLogin} />
-                                 <Route path="/admin/form/reg" component={FormRegister} />
-                                 <Route path="/admin/table/basic" component={BasicTable} />
-                                 
-                                <Route component={NoMatch}/>
+                                <Route path="/admin/ui/buttons" component={Buttons} />
+                                <Route path="/admin/ui/modals" component={Modals} />
+                                <Route path="/admin/form/login" component={FormLogin} />
+                                <Route path="/admin/form/reg" component={FormRegister} />
+                                <Route path="/admin/table/basic" component={BasicTable} />
+                                <Route component={NoMatch} />
                             </Switch>
                         </Admin>
-                    }/>
-                    <Route path="/order/detail" component={Login}/>
+                    } />
+                    <Route path="/order/detail" component={Login} />
                 </App>
             </HashRouter>
         )
