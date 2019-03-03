@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { Card, Table, Modal, Button, message } from 'antd'
 import axios from './../../axios/index'
 // import axios from 'axios'
+import Utils from './../../utils/utils'
 
 const { Column, ColumnGroup } = Table;
 export default class BasicTable extends React.Component {
@@ -58,40 +59,34 @@ export default class BasicTable extends React.Component {
         this.request();
     }
     request = () => {
+        let _this = this;
         console.log('..')
-        // let baseUrl = 'https://www.easy-mock.com/mock/5c79ce273198586d15fdff04/mockapi'
-        // axios.get(baseUrl+'/table/list')
-        //     .then((res) => {
-        //         console.log(res.status)
-        //         if(res.status == '200' && res.data.code == 0){
-        //             console.log(JSON.stringify(res));
-        //             this.setState({
-        //                 dataSource2: res.data.result
-        //             })
-        //         }
-
-        //     })
-        //     .catch((err)=>{
-        //         console.log(JSON.stringify(err));
-        //     });
         axios.ajax({
             url: '/table/list',
             data: {
                 params: {
-                    page: 1
+                    page: this.params.page
                 }
                 // isShowLoading: false
             }
         }).then((res) => {
             if (res.code == 0) {
-                res.result.map((item, index) => {
+                res.result.list.map((item, index) => {
                     item.key = index;
                 })
                 console.log(JSON.stringify(res))
                 this.setState({
-                    dataSource2: res.result,
+                    dataSource2: res.result.list,
                     selectedRowKeys: [],
-                    selectedRows: null
+                    selectedRows: null,
+                    //res返回的是在mock网上定义的所有数据：包括code，模msg， result等
+                    pagination: Utils.pagination(res, (current) => {
+                        //todo
+                        console.log(res)
+                        console.log(current)
+                        _this.params.page = current;
+                        this.request();
+                    })
                 })
             }
         })
@@ -115,8 +110,8 @@ export default class BasicTable extends React.Component {
         let ids = [];
         console.log(rows)
         console.log(rows.length)
-        if(rows.length>1) {
-            rows.map((item)=>{
+        if (rows.length > 1) {
+            rows.map((item) => {
                 ids.push(item.id)
             })
         }
@@ -124,7 +119,7 @@ export default class BasicTable extends React.Component {
         Modal.confirm({
             title: '删除提示',
             content: `你确认要删除这些信息吗 ${ids.join(',')}`,
-            onOk:()=>{
+            onOk: () => {
                 message.success('删除成功');
                 this.request();
             }
@@ -285,6 +280,17 @@ export default class BasicTable extends React.Component {
                         columns={columns}
                         dataSource={this.state.dataSource2}
                         pagination={false}
+                    />
+                </Card>
+                <Card title="Mock分页" style={{ margin: '10px 0' }}>
+                    <Button onClick={this.handleDelete}>
+                        删除
+                     </Button>
+                    <Table
+                        bordered
+                        columns={columns}
+                        dataSource={this.state.dataSource2}
+                        pagination={this.state.pagination}
                     />
                 </Card>
             </div>
